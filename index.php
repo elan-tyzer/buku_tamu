@@ -16,6 +16,7 @@ $dataTamu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Buku Tamu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -23,10 +24,14 @@ $dataTamu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h1>Buku Tamu</h1>
 
     <form action="proses.php" method="POST">
-
         <p>
             Nama:<br>
             <input type="text" name="nama" required>
+        </p>
+
+        <p>
+            Nomor Telepon:<br>
+            <input type="text" name="nomor_telepon" required>
         </p>
 
         <p>
@@ -44,28 +49,23 @@ $dataTamu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <hr>
-
     <h2>Daftar Tamu</h2>
 
     <?php foreach ($dataTamu as $tamu): ?>
-
-        <h3>
-            <?php echo htmlspecialchars($tamu["nama"]); ?>
-        </h3>
-
+        <h3><?= htmlspecialchars($tamu["nama"]) ?></h3>
+        <p>Email: <?= htmlspecialchars($tamu["email"]) ?></p>
+        <p>Nomor Telepon: <?= htmlspecialchars($tamu["nomor_telepon"] ?? "", ENT_QUOTES, "UTF-8") ?></p>
+        <p><?= htmlspecialchars($tamu["pesan"]) ?></p>
+        <small><?= htmlspecialchars($tamu["created_at"]) ?></small>
         <p>
-            Email:
-            <?php echo htmlspecialchars($tamu["email"]); ?>
+            <a href="edit.php?id=<?= (int) $tamu["id"] ?>">Edit</a>
+            <a
+                href="hapus.php?id=<?= (int) $tamu["id"] ?>"
+                onclick="return confirm('Yakin ingin menghapus?');"
+            >
+                Hapus
+            </a>
         </p>
-
-        <p>
-            <?php echo htmlspecialchars($tamu["pesan"]); ?>
-        </p>
-
-        <small>
-            <?php echo $tamu["created_at"]; ?>
-        </small>
-
         <hr>
 
     <?php endforeach; ?>
